@@ -12,11 +12,11 @@ df.drop(['Number of Records', 'ModuleCode', 'MeasurementInterval', 'ModuleName']
 
 df['MeasurementDateTime'] = pd.to_datetime(df['MeasurementDateTime'], dayfirst=True)
 df = df.sort_values(by='MeasurementDateTime')
-df = df.loc[df.Unit == '°C']
+df = df.loc[df.Unit == 'Lux']
 df_group = df.groupby(['SensorId']).mean()
 print(df_group)
 
-df = df[~df['SensorId'].isin(['602267e77f522d0007fb01cc', '602267e77f522d0007fb01d2', '602267e77f522d0007fb01d3', '602267e87f522d0007fb01d6', '602267e87f522d0007fb01da', '602267e87f522d0007fb01db', '602267e87f522d0007fb01e2', '602267e87f522d0007fb01e3', '602267e87f522d0007fb01e7'])]
+df = df[~df['SensorId'].isin(['602267e77f522d0007fb01d2', '602267e87f522d0007fb01d7', '602267e87f522d0007fb01d8', '602267e87f522d0007fb01dc', '602267e87f522d0007fb01dd'])]
 df = df.reset_index()
 df.drop('index', axis=1, inplace=True)
 
@@ -24,7 +24,7 @@ df = df[df['MeasurementDateTime'] < '2020-07-01']
 
 Tp = 4750
 plt.figure(figsize=(15, 4))
-plt.title("Temperature of first {} data points".format(Tp), fontsize=16)
+plt.title("Exposure of first {} data points".format(Tp), fontsize=16)
 plt.scatter(df['MeasurementDateTime'][:Tp], df['Value'][:Tp], c = df['Value'][:Tp], cmap = 'plasma', s = 2, lw=1)
 plt.grid(True)
 plt.xticks(fontsize=14)
@@ -32,7 +32,7 @@ plt.yticks(fontsize=14)
 plt.show()
 
 plt.figure(figsize=(15, 4))
-plt.title("Temperature all data points", fontsize=16)
+plt.title("Exposure: all data points", fontsize=16)
 plt.scatter(df['MeasurementDateTime'], df['Value'], c = df['Value'], cmap = 'plasma', s = 2, lw=1)
 plt.grid(True)
 plt.xticks(fontsize=14)
@@ -105,7 +105,7 @@ predicted = np.concatenate((trainPredict, testPredict), axis=0)
 index = df.index.values
 
 plt.figure(figsize=(15, 5))
-plt.title("Temperature: Ground truth and prediction together", fontsize=18)
+plt.title("Exposure: Ground truth and prediction together", fontsize=18)
 plt.plot(df['MeasurementDateTime'], df['Value'], c='blue')
 plt.plot(df['MeasurementDateTime'], predicted, c='orange', alpha=0.75)
 plt.legend(['True data', 'Predicted'], fontsize=15)
