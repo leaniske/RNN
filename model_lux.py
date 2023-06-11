@@ -57,9 +57,11 @@ def convertToMatrix(data, step):
     return np.array(X), np.array(Y)
 
 
-def build_simple_rnn(num_units=128, embedding=4, num_dense=32, lr=0.001):
+def build_simple_rnn(num_units=128, embedding=4, num_dense=32, lr=0.0005):
     model = Sequential()
     model.add(SimpleRNN(units=num_units, input_shape=(1, embedding), activation="relu"))
+    model.add(Dense(num_dense, activation="relu"))
+    model.add(Dense(num_dense, activation="relu"))
     model.add(Dense(num_dense, activation="relu"))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer=RMSprop(lr=lr), metrics=['mse'])
@@ -84,7 +86,7 @@ testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 
 model_temp = build_simple_rnn(num_units=128, num_dense=32, embedding=8, lr=0.001)
 
-batch_size = 50
+batch_size = 64
 num_epochs = 2000
 
 model_temp.fit(trainX, trainY, epochs=num_epochs, batch_size=batch_size, callbacks=[MyCallback()], verbose=0)
@@ -102,6 +104,7 @@ plt.show()
 trainPredict = model_temp.predict(trainX)
 testPredict = model_temp.predict(testX)
 predicted = np.concatenate((trainPredict, testPredict), axis=0)
+
 index = df.index.values
 
 plt.figure(figsize=(15, 5))

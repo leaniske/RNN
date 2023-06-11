@@ -73,9 +73,11 @@ def convertToMatrix(data, step):
 
 
 # Funkcja do budowy modelu RNN.
-def build_simple_rnn(num_units=128, embedding=4, num_dense=32, lr=0.001):
+def build_simple_rnn(num_units=128, embedding=4, num_dense=32, lr=0.0005):
     model = Sequential()
     model.add(SimpleRNN(units=num_units, input_shape=(1, embedding), activation="relu"))
+    model.add(Dense(num_dense, activation="relu"))
+    model.add(Dense(num_dense, activation="relu"))
     model.add(Dense(num_dense, activation="relu"))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer=RMSprop(lr=lr), metrics=['mse'])
@@ -103,7 +105,7 @@ testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 # Inicjalizacja modelu sieci neuronowej.
 model_temp = build_simple_rnn(num_units=128, num_dense=32, embedding=8, lr=0.001)
 
-batch_size = 50
+batch_size = 64
 num_epochs = 2000
 
 # Trenowanie modelu sieci neuronowej.
